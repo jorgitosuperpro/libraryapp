@@ -103,6 +103,6 @@ form {
     gap: 10px;
 }
 
-.submit {
+input .submit {
     width: 50px;
 }

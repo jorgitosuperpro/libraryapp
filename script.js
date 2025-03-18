@@ -39,21 +39,42 @@ function readAndDisplayLibrary(library) {
     });
 }
 
+function readNewBook(book) {
+    const div = document.createElement("div");
+    div.classList.add("card");
+    const title = document.createElement("h3");
+    title.classList.add("title");
+    const author = document.createElement("p");
+    author.classList.add("author");
+    const pages = document.createElement("p");
+    pages.classList.add("pages");
+    const read = document.createElement("p");
+    read.classList.add("read");
+    frame.appendChild(div);
+    div.appendChild(title);
+    div.appendChild(author);
+    div.appendChild(pages);
+    div.appendChild(read);
+    title.innerHTML = book.title;
+    author.innerHTML = book.author;
+    pages.innerHTML = "Pages: " + book.pages;
+    read.innerHTML = book.read;
+}
+
 const frame = document.querySelector(".content");
-const book_one = new Book("El Quijote", "Miguel de Cervantes", "531", "no read");
+const book_one = new Book("El Quijote", "Miguel de Cervantes", "531", "not read");
 const book_two = new Book("鏡の孤城", "Mizuki Tsujimura", "413", "read");
 const book_three = new Book("The Subtle Art of Not Giving a F*ck", "Mark Manson", "272", "read");
 addBookToLibrary(book_one);
 addBookToLibrary(book_two);
 addBookToLibrary(book_three);
 readAndDisplayLibrary(library);
-
+//add book
 const addbook = document.querySelector(".add-book");
 addbook.addEventListener("click", () => {
     const form = document.createElement("form");
     frame.appendChild(form);
-    form.setAttribute("action", "library.com/form")
-    form.setAttribute("method", "post");
+    form.setAttribute("name", "myform");
     //title
     const label = document.createElement("label");
     form.appendChild(label);
@@ -108,8 +129,19 @@ addbook.addEventListener("click", () => {
     form.appendChild(input4);
     //submit button
     const submit = document.createElement("button");
+    submit.setAttribute("type", "button");
+    submit.setAttribute("name", "submit");
     submit.innerHTML = "Submit";
-    submit.setAttribute("type", "submit");
-    submit.setAttribute("class", "submit");
     form.appendChild(submit);
+    submit.addEventListener("click", () => {
+        const title_book = document.forms["myform"].title.value;
+        const author_book = document.forms["myform"].author.value;
+        const pages_book = document.forms["myform"].pages.value;
+        const read_book = document.forms["myform"].read.value;
+        frame.removeChild(form);
+        const myNewBook = new Book(title_book, author_book, pages_book, read_book);
+        addBookToLibrary(myNewBook);
+        readNewBook(myNewBook);
+    });
 });
+
