@@ -46,7 +46,7 @@ h2 {
 
 .title {
     text-align: center;
-    margin-top: 5px;
+    margin-top: 15px;
     font-size: 28px;
     height: 70px;
     padding-bottom: 5px;
@@ -67,6 +67,7 @@ h2 {
 .read {
     text-align: center;
     margin-top: 30px;
+    font-weight: bold;
 }
 
 .buttons {
@@ -94,8 +95,21 @@ button:hover {
     background-color: rgb(27, 214, 27);
 }
 
+.add-book:disabled {
+    opacity: 40%;
+}
+
 .remove-book {
+    width: 100px;
+    height: 50px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 10px;
+    border-style: none;
     background-color: rgb(223, 50, 50);
+    margin-left: 100px;
+    margin-top: 10px;
 }
 
 form {

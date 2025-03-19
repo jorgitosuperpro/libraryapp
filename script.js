@@ -11,6 +11,14 @@ function Book(title, author, pages, read) {
     }
 }
 
+function validateForm() {
+    let x = document.forms["myform"]["title"].value;
+    if (x == "") {
+      alert("Title must be filled out");
+      return false;
+    }
+  } 
+
 function addBookToLibrary(book) {
     library.push(book);
 }
@@ -19,6 +27,7 @@ function readAndDisplayLibrary(library) {
     library.forEach(book => {
         const div = document.createElement("div");
         div.classList.add("card");
+        div.setAttribute("data-id", book.id);
         const title = document.createElement("h3");
         title.classList.add("title");
         const author = document.createElement("p");
@@ -27,21 +36,26 @@ function readAndDisplayLibrary(library) {
         pages.classList.add("pages");
         const read = document.createElement("p");
         read.classList.add("read");
+        const remove = document.createElement("button");
+        remove.classList.add("remove-book");
         frame.appendChild(div);
         div.appendChild(title);
         div.appendChild(author);
         div.appendChild(pages);
         div.appendChild(read);
+        div.appendChild(remove);
         title.innerHTML = book.title;
         author.innerHTML = book.author;
         pages.innerHTML = "Pages: " + book.pages;
         read.innerHTML = book.read;
+        remove.innerHTML = "Remove Book";
     });
 }
 
 function readNewBook(book) {
     const div = document.createElement("div");
     div.classList.add("card");
+    div.setAttribute("data-id", book.id);
     const title = document.createElement("h3");
     title.classList.add("title");
     const author = document.createElement("p");
@@ -50,15 +64,25 @@ function readNewBook(book) {
     pages.classList.add("pages");
     const read = document.createElement("p");
     read.classList.add("read");
+    const remove = document.createElement("button");
+    remove.classList.add("remove-book");
     frame.appendChild(div);
     div.appendChild(title);
     div.appendChild(author);
     div.appendChild(pages);
     div.appendChild(read);
+    div.appendChild(remove);
     title.innerHTML = book.title;
     author.innerHTML = book.author;
     pages.innerHTML = "Pages: " + book.pages;
     read.innerHTML = book.read;
+    remove.innerHTML = "Remove Book";
+    document.querySelectorAll(".remove-book").forEach(remove_button => 
+        remove_button.addEventListener("click", () => {
+            const original_card = remove_button.parentElement;
+            frame.removeChild(original_card);
+        })
+    );
 }
 
 const frame = document.querySelector(".content");
@@ -72,9 +96,13 @@ readAndDisplayLibrary(library);
 //add book
 const addbook = document.querySelector(".add-book");
 addbook.addEventListener("click", () => {
+    addbook.setAttribute("disabled", "");
     const form = document.createElement("form");
     frame.appendChild(form);
     form.setAttribute("name", "myform");
+    form.setAttribute("action", "#");
+    form.setAttribute("method", "post");
+    form.setAttribute("onsubmit", "window.validateForm();");
     //title
     const label = document.createElement("label");
     form.appendChild(label);
@@ -85,7 +113,6 @@ addbook.addEventListener("click", () => {
     input.setAttribute("type", "text");
     input.setAttribute("id", "title");
     input.setAttribute("name", "title");
-    input.setAttribute("required", "");
     //author
     const label1 = document.createElement("label");
     label1.setAttribute("for", "author");
@@ -95,7 +122,7 @@ addbook.addEventListener("click", () => {
     input1.setAttribute("type", "text");
     input1.setAttribute("id", "author");
     input1.setAttribute("name", "author");
-    input1.setAttribute("required", "");
+    input1.required = true;
     form.appendChild(input1);
     //pages
     const label2 = document.createElement("label");
@@ -115,7 +142,7 @@ addbook.addEventListener("click", () => {
     const input3 = document.createElement("input");
     input3.setAttribute("type", "checkbox");
     input3.setAttribute("id", "read");
-    input3.setAttribute("name", "read");
+    input3.setAttribute("value", "read");
     form.appendChild(input3);
     //checkbox not read
     const label4 = document.createElement("label");
@@ -125,23 +152,34 @@ addbook.addEventListener("click", () => {
     const input4 = document.createElement("input");
     input4.setAttribute("type", "checkbox");
     input4.setAttribute("id", "no-read");
-    input4.setAttribute("name", "no-read");
+    input4.setAttribute("value", "not-read");
     form.appendChild(input4);
     //submit button
     const submit = document.createElement("button");
-    submit.setAttribute("type", "button");
-    submit.setAttribute("name", "submit");
+    submit.setAttribute("type", "submit");
     submit.innerHTML = "Submit";
     form.appendChild(submit);
     submit.addEventListener("click", () => {
+        addbook.removeAttribute("disabled", "");
         const title_book = document.forms["myform"].title.value;
         const author_book = document.forms["myform"].author.value;
         const pages_book = document.forms["myform"].pages.value;
-        const read_book = document.forms["myform"].read.value;
+        if (document.querySelector('input[id=read]').checked) {
+            read_book = "read";
+        } else {
+            read_book = "not read";
+        }
+        // const read_book = document.forms["myform"].read.value;
         frame.removeChild(form);
         const myNewBook = new Book(title_book, author_book, pages_book, read_book);
         addBookToLibrary(myNewBook);
         readNewBook(myNewBook);
     });
 });
-
+//remove book
+document.querySelectorAll(".remove-book").forEach(remove_button => 
+    remove_button.addEventListener("click", () => {
+        const original_card = remove_button.parentElement;
+        frame.removeChild(original_card);
+    })
+);
