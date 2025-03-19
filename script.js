@@ -81,6 +81,11 @@ function readNewBook(book) {
         remove_button.addEventListener("click", () => {
             const original_card = remove_button.parentElement;
             frame.removeChild(original_card);
+            const book_id = original_card.dataset;
+            for (let i = 0; i < library.length; i++) {
+                if (book_id["id"] === library[i].id)
+                    library.splice(i, 1);
+            }
         })
     );
 }
@@ -176,10 +181,16 @@ addbook.addEventListener("click", () => {
         readNewBook(myNewBook);
     });
 });
-//remove book
+//remove book from dom and js
 document.querySelectorAll(".remove-book").forEach(remove_button => 
     remove_button.addEventListener("click", () => {
         const original_card = remove_button.parentElement;
         frame.removeChild(original_card);
+        //quita libro del array
+        const book_id = original_card.dataset;
+        for (let i = 0; i < library.length; i++) {
+            if (book_id["id"] === library[i].id)
+                library.splice(i, 1);
+        }
     })
 );
